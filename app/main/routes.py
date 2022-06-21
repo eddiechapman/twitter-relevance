@@ -3,11 +3,12 @@ import datetime
 import io
 from random import randint
 
-from flask import current_app, flash, make_response, redirect, render_template, url_for
+from flask import current_app as app, flash, make_response, redirect, render_template, url_for
+from werkzeug.utils import secure_filename
 
 from app import db
 from app.main import bp
-from app.main.forms import ArticleForm
+from app.main.forms import ArticleForm, ImportForm
 from app.models import Article
 
 
@@ -42,6 +43,30 @@ def review_article(article_id):
         return redirect(url_for("main.get_article"))
         
     return render_template("article.html", article=article, form=form)
+
+
+@bp.route("/import_data", methods=["GET", "POST"])
+def import_data():
+    form = ImportForm()
+    if form.validate_on_submit():
+        filename = secure_filename(form.file.data.filename)
+        filepath = app.config["UPLOADS"] / filename
+        form.file.data.save(filepath)
+
+        with filepath.open("r", encoding="utf-8-sig") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                article = Article.from_row(row)
+                db.session.add(article)
+                try:
+                    db.session.commit()
+                except sqlalchemy.exc.IntegrityError as e:
+                    db.session.rollback()
+        filepath.unlink()
+        return redirect(url_for("main.index"))
+
+    return render_template("upload.html", form=form)    
+
 
 
 @bp.route("/export_data")

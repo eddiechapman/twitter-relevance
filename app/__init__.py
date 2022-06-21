@@ -16,5 +16,7 @@ def create_app(config_class=Config):
     
     app.register_blueprint(main_bp, cli_group=None)
 
+    app.config["UPLOADS"].mkdir(exist_ok=True)
+
     return app
     
