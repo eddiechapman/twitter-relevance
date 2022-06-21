@@ -47,6 +47,7 @@ def review_article(article_id):
 
 @bp.route("/import_data", methods=["GET", "POST"])
 def import_data():
+    db.create_all()
     form = ImportForm()
     if form.validate_on_submit():
         filename = secure_filename(form.file.data.filename)
@@ -84,3 +85,13 @@ def export_data():
         response.headers["Content-type"] = "text/csv"
 
         return response
+
+
+@bp.route("/clear_db")
+def clear_db():
+    db.drop_all()
+    db.create_all()
+
+    flash("All articles have been REMOVED!")
+
+    return redirect(url_for("main.index"))
