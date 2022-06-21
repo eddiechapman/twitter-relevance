@@ -15,7 +15,13 @@ from app.models import Article
 
 @bp.route("/")
 def index():
-    return render_template("index.html")
+    articles_count = len(Article.query.all())
+    reviewed_count = len([art for art in Article.query.all() if art.reviewed])
+    return render_template(
+        "index.html", 
+        articles_count=articles_count, 
+        reviewed_count=reviewed_count
+    )
 
 
 @bp.route("/get_article")
@@ -74,10 +80,11 @@ def import_data():
 @bp.route("/export_data")
 def export_data():
     with io.StringIO() as f:
-        writer = csv.DictWriter(f, fieldnames=Article.column_names)
+        writer = csv.DictWriter(f, fieldnames=Article.column_names, quoting=csv.QUOTE_ALL)
         writer.writeheader()
         for article in Article.query.all():
-            writer.writerow(article.to_row())
+            row = article.to_row()
+            writer.writerow(row)
 
         today = datetime.datetime.today().strftime("%Y-%m-%d")
         filename = f"twitter_research_export_{today}.csv"
