@@ -19,8 +19,8 @@ class Article(db.Model):
     publication_title = db.Column(db.String(300))
     doi = db.Column(db.String(100))
     abstract = db.Column(db.Text)
-    manual_tags = db.Column(db.Text)
-    automatic_tags = db.Column(db.Text)
+    manual_tags = db.Column(db.String(1000))
+    automatic_tags = db.Column(db.String(1000))
     relevance = db.Column(db.String(100))
     comments = db.Column(db.Text)
 
