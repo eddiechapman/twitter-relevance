@@ -12,15 +12,15 @@ class Article(db.Model):
     __tablename__ = "article"
 
     id = db.Column(db.Integer, primary_key=True)
-    key = db.Column(db.String(10), unique=True, nullable=False)
-    publication_year = db.Column(db.String(4))
-    authors = db.Column(db.String(300))
-    title = db.Column(db.String(300))
-    publication_title = db.Column(db.String(100))
+    key = db.Column(db.String(100), unique=True, nullable=False)
+    publication_year = db.Column(db.String(100))
+    authors = db.Column(db.Text)
+    title = db.Column(db.Text)
+    publication_title = db.Column(db.String(300))
     doi = db.Column(db.String(100))
     abstract = db.Column(db.Text)
-    manual_tags = db.Column(db.String(500))
-    automatic_tags = db.Column(db.String(500))
+    manual_tags = db.Column(db.Text)
+    automatic_tags = db.Column(db.Text)
     relevance = db.Column(db.String(100))
     comments = db.Column(db.Text)
 
