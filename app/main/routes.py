@@ -4,6 +4,7 @@ import io
 from random import randint
 
 from flask import current_app as app, flash, make_response, redirect, render_template, url_for
+import sqlalchemy
 from werkzeug.utils import secure_filename
 
 from app import db
