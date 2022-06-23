@@ -1,58 +1,53 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="row">
-  <div class="col-md-12">
-    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative bg-white">
-      <div class="col-12 p-4 d-flex flex-column position-static">
-        <p class="lead mb-1"><strong>{{ article.title }}</strong></p>
-        <em>{{ article.authors }}</em>
-      </div>
-      <div class="col-12 px-4 pb-2 d-flex flex-column position-static">
-        <p class="mb-1">{{ article.abstract }}</p>
-        <em>{{ article.keywords }}</em>
-      </div>
-    </div>
+
+<div class="g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative bg-white">
+  <div class="col-md-12 p-4 d-flex flex-column position-static">
+    <p class="lead mb-1"><strong class="highlight">{{ article.title or '[NO TITLE]' }}</strong></p>
+    <em>{{ article.authors or '[NO AUTHORS]' }}</em>
+  </div>
+  <div class="col-md-12 px-4 pb-2 d-flex flex-column position-static">
+    <p class="mb-1 highlight">{{ article.abstract or '[NO ABSTRACT]' }}</p>
+    <em class="highlight">{{ article.keywords }}</em>
   </div>
 </div>
 
+<div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative bg-white">
+  
+  <form action="" method="POST" role="form">
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative bg-white">
-      
-      <form action="" method="POST" role="form">
+    {{ form.hidden_tag() }}
 
-        {{ form.hidden_tag() }}
-
-        <div class="col-12 px-4 pt-4 pb-2 d-flex flex-column position-static">
-          <label for="relevance" class="col-form-label">Relevant?</label>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="relevance" id="relevance0" value="yes">
-            <label class="form-check-label" for="relevance0">Yes</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="relevance" id="relevance1" value="no">
-            <label class="form-check-label" for="relevance1">No</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="relevance" id="relevance2" value="unsure">
-            <label class="form-check-label" for="relevance2">Unsure</label>
-          </div>
-        </div>
-
-        <div class="col-12 px-4 pt-2 pb-2 d-flex flex-column position-static">
-          <label for="comments" class="col-form-label">Comments</label>
-          <textarea class="form-control" id="comments" rows="4" name="comments"></textarea>
-        </div>
-
-        <div class="col-12 px-4  pt-4 pb-4 d-flex flex-column position-static">
-          <button type="submit" class="btn-lg btn-primary">Submit</button>
-        </div>
-
-      </form>
-
+    <div class="col-12 px-4 pt-4 pb-2 d-flex flex-column position-static">
+      {% for error in form.relevance.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+      {% endfor %}
+      <label for="relevance" class="col-form-label">Relevant?</label>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="relevance" id="relevance0" value="yes">
+        <label class="form-check-label" for="relevance0">Yes</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="relevance" id="relevance1" value="no">
+        <label class="form-check-label" for="relevance1">No</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="relevance" id="relevance2" value="unsure">
+        <label class="form-check-label" for="relevance2">Unsure</label>
+      </div>
     </div>
-  </div>
+
+    <div class="col-12 px-4 pt-2 pb-2 d-flex flex-column position-static">
+      <label for="comments" class="col-form-label">Comments</label>
+      <textarea class="form-control" id="comments" rows="4" name="comments"></textarea>
+    </div>
+
+    <div class="col-12 px-4  pt-4 pb-4 d-flex flex-column position-static">
+      <button type="submit" class="btn-lg btn-primary">Submit</button>
+    </div>
+
+  </form>
+
 </div>
 
 

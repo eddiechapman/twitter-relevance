@@ -5,17 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Twitter Research Relevance</title>
+    <title>Twitter Review</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-
-    <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"> 
-    <link href="{{ SITEURL }}/theme/style.css" rel="stylesheet" type="text/css"> -->
-    
+  
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='style.css') }}">
+  
   </head>
   <body>
 
@@ -23,14 +20,19 @@
       <header>
         <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom pb-2 mb-4">
           <div class="container-fluid">
-            <h1 class="pb-0"><a class="navbar-brand" href="{{ url_for('main.index') }}"><strong>Twitter Research Relevance Review</strong></a></h1>
+            <h1 class="pb-0"><a class="navbar-brand" href="{{ url_for('index') }}"><strong>Twitter Review</strong></a></h1>
+            <ul class="navbar-nav">
+              <li class="nav-item active">
+                  <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+              </li>
+            </ul>
           </div>
         </nav>
       </header>
   
       <main>
         <div class="row justify-content-center">
-          <div class="col-lg-9">
+          <div class="col-md-9 col-lg-8">
             {% with messages = get_flashed_messages() %}
               {% if messages %}
                 {% for message in messages %}
@@ -50,6 +52,15 @@
 
     <!-- Bootstrap JavaScript bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    
+    <!-- Mark.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha512-mhbv5DqBMgrWL+32MmsDOt/OAvqr/cHimk6B8y/bx/xS88MVkYGPiVv2ixKVrkywF2qHplNRUvFsAHUdxZ3Krg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
+  
+    <!-- Highlighting script -->
+    <script src="{{ url_for('static', filename='highlight.js') }}"></script>
   
   </body>
 </html>

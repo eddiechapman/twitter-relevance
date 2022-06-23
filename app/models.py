@@ -64,5 +64,4 @@ class Article(db.Model):
             "Comments": self.comments,
             "Reviewed": self.reviewed
         }
-
     

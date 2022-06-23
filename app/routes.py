@@ -3,18 +3,20 @@ import datetime
 import io
 from random import randint
 
-from flask import current_app as app, flash, make_response, redirect, render_template, url_for
+from flask import flash, make_response, redirect, render_template, url_for
 import sqlalchemy
 from werkzeug.utils import secure_filename
 
-from app import db
-from app.main import bp
-from app.main.forms import ArticleForm, ImportForm
+from app import app, db
+from app.forms import ArticleForm, ImportForm
 from app.models import Article
 
 
-@bp.route("/")
+@app.route("/")
 def index():
+    """
+    Serve the application home page
+    """
     articles_count = len(Article.query.all())
     reviewed_count = len([art for art in Article.query.all() if art.reviewed])
     return render_template(
@@ -24,20 +26,27 @@ def index():
     )
 
 
-@bp.route("/get_article")
+@app.route("/get_article")
 def get_article():
+    """Load an article from the database for review.
+
+    Selects articles randomly rather than sequentially to avoid 
+    serving the same article to simultaneous users. This could 
+    be avoided by locking an Article once it is served. 
+
+    """
     article_count = len(Article.query.all())
     for i in range(article_count):
         article_id = randint(1, article_count)
         article = Article.query.get(article_id)
         if not article.reviewed:
-            return redirect(url_for("main.review_article", article_id=int(article.id)))
+            return redirect(url_for("review_article", article_id=int(article.id)))
 
     flash("All articles have now been reviewed!")
-    return redirect(url_for("main.index"))
+    return redirect(url_for("index"))
 
 
-@bp.route("/review_article/<int:article_id>", methods=['GET', 'POST'])
+@app.route("/review_article/<int:article_id>", methods=['GET', 'POST'])
 def review_article(article_id):
     article = Article.query.get(article_id)
     form = ArticleForm()
@@ -47,13 +56,18 @@ def review_article(article_id):
         article.comments = form.comments.data
         db.session.commit()
         flash("Relevance data submitted")
-        return redirect(url_for("main.get_article"))
+        return redirect(url_for("get_article"))
         
     return render_template("article.html", article=article, form=form)
 
 
-@bp.route("/import_data", methods=["GET", "POST"])
+@app.route("/import_data", methods=["GET", "POST"])
 def import_data():
+    """
+    Accepts a CSV upload and reads contents into database
+
+    The file is deleted after contents are read.
+    """
     db.create_all()
     form = ImportForm()
     if form.validate_on_submit():
@@ -71,14 +85,16 @@ def import_data():
                 except sqlalchemy.exc.IntegrityError as e:
                     db.session.rollback()
         filepath.unlink()
-        return redirect(url_for("main.index"))
+        return redirect(url_for("index"))
 
     return render_template("upload.html", form=form)    
 
 
-
-@bp.route("/export_data")
+@app.route("/export_data")
 def export_data():
+    """
+    Download a CSV file containing article metadata and form data
+    """
     with io.StringIO() as f:
         writer = csv.DictWriter(f, fieldnames=Article.column_names, quoting=csv.QUOTE_ALL)
         writer.writeheader()
@@ -95,11 +111,14 @@ def export_data():
         return response
 
 
-@bp.route("/clear_db")
+@app.route("/clear_db")
 def clear_db():
+    """
+    Delete and reinitialize the database
+    """
     db.drop_all()
     db.create_all()
 
     flash("All articles have been REMOVED!")
 
-    return redirect(url_for("main.index"))
+    return redirect(url_for("index"))

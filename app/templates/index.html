@@ -2,27 +2,24 @@
 
 {% block content %}
 
-<div class="row">
-  <div class="col-md-12">
-    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative bg-white">
-      <div class="col-12 p-4 d-flex flex-column position-static">
-        <strong>Total articles: {{ articles_count }}</strong>
-        <strong>Reviewed: {{ reviewed_count }}</strong>
-      </div>
-      <div class="col-12 p-4 d-flex flex-column position-static">
-        <a class="btn-lg btn-primary" role="button" href="{{ url_for('main.get_article') }}">Review Twitter articles</a>
-      </div>
-      <div class="col-12 p-4 d-flex flex-column position-static">
-        <a class="btn-lg btn-secondary" role="button" href="{{ url_for('main.export_data') }}">Download review data</a>
-      </div>
-      <div class="col-12 p-4 d-flex flex-column position-static">
-        <a class="btn-lg btn-warning" role="button" href="{{ url_for('main.import_data') }}">Upload article data</a>
-      </div>
-      <div class="col-12 p-4 d-flex flex-column position-static">
-        <a class="btn-lg btn-danger" role="button" href="{{ url_for('main.clear_db') }}">Delete all articles from database</a>
-      </div>
-    </div>
+<div class="g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative bg-white">
+  <div class="px-4 py-2 d-flex flex-column position-static">
+    <strong>Total articles: {{ articles_count }}</strong>
+    <strong>Reviewed: {{ reviewed_count }}</strong>
+  </div>
+  <div class="px-4 py-2 d-flex flex-column position-static">
+    <a class="btn-lg btn-primary" role="button" href="{{ url_for('get_article') }}">Review Twitter articles</a>
+  </div>
+  <div class="px-4 py-2 d-flex flex-column position-static">
+    <a class="btn-lg btn-secondary" role="button" href="{{ url_for('export_data') }}">Download review data</a>
+  </div>
+  <div class="px-4 py-2 d-flex flex-column position-static">
+    <a class="btn-lg btn-warning" role="button" href="{{ url_for('import_data') }}">Upload article data</a>
+  </div>
+  <div class="px-4 py-2 pb-4 d-flex flex-column position-static">
+    <a class="btn-lg btn-danger" role="button" href="{{ url_for('clear_db') }}">Delete all articles from database</a>
   </div>
 </div>
+
 
 {% endblock %}

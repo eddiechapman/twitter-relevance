@@ -3,20 +3,15 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-from config import Config
+app = Flask(__name__)
 
-db = SQLAlchemy()
+env_config = os.getenv("APP_SETTINGS", "config.DevelopmentConfig")
+app.config.from_object(env_config)
+app.config["UPLOADS"].mkdir(exist_ok=True)
 
-def create_app(config_class=Config):
-    app = Flask(__name__)
-    app.config.from_object(config_class)
-    db.init_app(app)
+db = SQLAlchemy(app)
 
-    from app.main import bp as main_bp
-    
-    app.register_blueprint(main_bp, cli_group=None)
+from app import routes, models
 
-    app.config["UPLOADS"].mkdir(exist_ok=True)
-
-    return app
-    
+db.create_all()
+db.session.commit()
