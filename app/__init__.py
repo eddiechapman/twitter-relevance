@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import sqlalchemy
 
 app = Flask(__name__)
 
@@ -13,5 +14,9 @@ db = SQLAlchemy(app)
 
 from app import routes, models
 
-db.create_all()
-db.session.commit()
+try:
+    db.create_all()
+except sqlalchemy.exc.OperationalError as e:
+    db.session.rollback()
+else:
+    db.session.commit()
